@@ -2,6 +2,7 @@ using Api_library.Controllers;
 using Api_library.Models;
 using Api_library.Services;
 using AutoMapper;
+using Library.Db;
 using Library.Db.Entitties;
 using Moq;
 using System;
@@ -14,13 +15,14 @@ namespace LibraryTest
         private Mock<IUserInfoService> _userInfoServiceMock = new Mock<IUserInfoService>();
         private Mapper _mapper;
         private UsersController _userController;
+        private MainContext _context;
 
         public LibraryTest()
         {
             _userInfoServiceMock.Setup(repo => repo.GetUserInfoById(2)).Returns(GetDbUser());
             var mapConfig = new MapperConfiguration(cfg => cfg.CreateMap<DbUser, DtoUser>());
             _mapper = new Mapper(mapConfig);
-            _userController = new UsersController(_userInfoServiceMock.Object, _mapper);
+            _userController = new UsersController(_userInfoServiceMock.Object, _mapper, _context);
 
         }
         #region Data comparison
